@@ -43,5 +43,8 @@
                 {{ __('Log in') }}
             </x-primary-button>
         </div>
+        <div>
+            <input type="button" value="LINEでログインする"  onclick="location.href='{{ route('social', ['socialite.redirect' => 'line']) }}'">
+        </div>
     </form>
 </x-guest-layout>
