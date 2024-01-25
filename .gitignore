@@ -1,0 +1,6 @@
+/.vscode
+docker-laravel10/db/data
+docker-laravel10/phpmyadmin/sessions
+docker-laravel10/schemaspy/config
+docker-laravel10/schemaspy/output
+docker-laravel10/schemaspy/drivers

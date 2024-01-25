@@ -1,0 +1,42 @@
+version: '3'
+services:
+  app:
+    build: ./app
+    ports:
+      - 80:80
+      - 8080:8080
+    volumes:
+      - ../src:/var/www/app
+      - ./schemaspy/output:/var/www/html
+    working_dir: /var/www/app
+
+  db:
+    image: mysql:8.0
+    ports:
+      - 3306:3306
+    env_file:
+      - ./db/.env
+    volumes:
+      - ./db/data:/var/lib/mysql
+      - ./db/sql:/docker-entrypoint-initdb.d
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 4040:80
+    depends_on:
+      - db
+    env_file:
+      - ./phpmyadmin/.env
+    links:
+      - db
+    volumes:
+      - ./phpmyadmin/sessions:/sessions
+
+  schemaspy:
+    build: ./schemaspy
+    depends_on:
+      - db
+    volumes:
+      - ./docker/schemaspy/output:/output
+    command: [ "-configFile", "/config/schemaspy.properties" ]
