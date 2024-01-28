@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Social extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'driver',
+        'name'
+    ];
+
+    protected $casts = [
+        'driver' => 'string',
+        'name' => 'string',
+    ];
 }

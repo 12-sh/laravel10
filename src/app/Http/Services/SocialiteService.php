@@ -1,19 +1,44 @@
 <?php
 namespace App\Http\Services;
 
+use App\Models\Social;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
-class SocialiteService extends Controller
+class SocialiteService
 {
-    public function checkResponse(Request $request, string $social) {
-        return $this->$social($request);
+    /**
+     * 認証時のコールバックチェック
+     *
+     * @param Request $request
+     * @param Social $social
+     * @return void
+     * @throws Exception
+     */
+    public function checkResponse(
+        Request $request,
+        Social $social
+    ): void
+    {
+        $rule = $social->driver . 'Rule';
+        $request->validate($this->$rule);
     }
 
-    protected function line(Request $request) {
-        if ($request->has('error')) {
-            Log::warning(sprintf("ソーシャルログイン LINE認証エラー"), $request->all());
-            return false;
-        }
-        return true;
+    /**
+     * ラインログイン認証時のコールバックチェック
+     *
+     * @param  Request $request
+     * @return bool
+     */
+    protected function lineRule(
+    ): array
+    {
+        return [
+            'code' => 'required',
+            'state' => 'required',
+            'friendship_status_changed' => 'required:accepted',
+            'error' => 'exclude',
+            'error_description' => 'exclude',
+        ];
     }
 }

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('socials', function (Blueprint $table) {
             $table->id();
+            $table->string('driver')->unique()->comment('ドライバー');
             $table->string('name')->unique()->comment('名称');
             $table->timestamps();
         });

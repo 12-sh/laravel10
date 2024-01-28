@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\SocialiteLoginController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,13 +36,21 @@ Route::middleware('guest')->group(function () {
                 ->name('password.store');
 
     // ソーシャルログイン
-    Route::get('/socialite/{social}', [SocialLoginController::class, 'redirectToProvider'])
-        ->name('socialite.redirect')
-        ->whereIn('social', ['line']);
+    Route::prefix('socialite')
+        ->controller(SocialiteLoginController::class)
+        ->group(function () {
+            Route::get('/{driver}', 'redirectToProvider')
+                ->name('socialite.redirect')
+                ->whereIn('driver', ['line']);
 
-    Route::get('/socialite/{social}/callback', [SocialLoginController::class, 'handleProviderCallback'])
-        ->name('socialite.callback')
-        ->whereIn('social', ['line']);
+            Route::get('/{social:driver}/callback', 'handleProviderCallback')
+                ->name('socialite.callback');
+
+            Route::get('/{social:driver}/confirmation', 'confirmation')
+                ->name('socialite.confirmation');
+
+            Route::post('/{social:driver}/register');
+        });
 });
 
 Route::middleware('auth')->group(function () {

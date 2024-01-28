@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Services\SocialService;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,12 +13,23 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
+    protected $socialService;
+
+    public function __construct(
+        SocialService $socialService,
+    ) {
+        $this->socialService = $socialService;
+    }
+
     /**
      * Display the login view.
      */
     public function create(): View
     {
-        return view('auth.login');
+        $socials = $this->socialService->list();
+        return view('auth.login', [
+            'socials' => $socials
+        ]);
     }
 
     /**

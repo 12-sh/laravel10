@@ -16,7 +16,8 @@ class SocialSeeder extends Seeder
 
     {
         $sociale = [
-            'name' => 'line',
+            'driver' => 'line',
+            'name' => 'LINE',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

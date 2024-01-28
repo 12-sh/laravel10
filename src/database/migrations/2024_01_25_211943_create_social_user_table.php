@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('social_id')->comment('ソーシャルID');
             $table->unsignedBigInteger('user_id')->comment('ユーザーID');
-            $table->string('unique_id')->unique()->comment('ユニークID');
+            $table->string('social_user_id')->unique()->comment('ソーシャルユーザーID');
             $table->timestamps();
 
             $table->foreign('social_id')->references('id')->on('socials');

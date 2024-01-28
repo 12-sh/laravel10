@@ -44,7 +44,14 @@
             </x-primary-button>
         </div>
         <div>
-            <input type="button" value="LINEでログインする"  onclick="location.href='{{ route('social', ['socialite.redirect' => 'line']) }}'">
+            @foreach ($socials as $social)
+                <input 
+                    type="button" 
+                    value="{{ $social->name }}でログインする" 
+                    onclick="location.href='{{ route('socialite.redirect', ['driver' => 'line']) }}'"
+                >
+                <x-input-error :messages="$errors->get('social.line')" class="mt-2" />
+            @endforeach
         </div>
     </form>
 </x-guest-layout>
