@@ -9,6 +9,13 @@ class SocialUser extends Model
 {
     use HasFactory;
 
+    /**
+     * モデルに関連付けるテーブル
+     *
+     * @var string
+     */
+    protected $table = 'social_user';
+
     protected $fillable = [
         'social_id',
         'user_id',

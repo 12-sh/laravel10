@@ -43,7 +43,13 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function social() {
-        $this->belongsToMany(Social::class);
+    /**
+     * ソーシャル
+     * 
+     * @return BelongsToMany
+     */
+    public function socials() {
+        return $this->belongsToMany(Social::class)
+            ->withPivot('social_user_id');
     }
 }

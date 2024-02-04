@@ -47,7 +47,7 @@
             @foreach ($socials as $social)
                 <input 
                     type="button" 
-                    value="{{ $social->name }}でログインする" 
+                    value="{{ __('Log in with :social', ['social' => $social->name])}}" 
                     onclick="location.href='{{ route('socialite.redirect', ['driver' => 'line']) }}'"
                 >
                 <x-input-error :messages="$errors->get('social.line')" class="mt-2" />

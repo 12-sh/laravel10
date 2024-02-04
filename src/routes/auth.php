@@ -8,6 +8,8 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\Socialite\LoginController;
+use App\Http\Controllers\Auth\Socialite\SocialiteController;
 use App\Http\Controllers\Auth\SocialiteLoginController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
@@ -37,23 +39,28 @@ Route::middleware('guest')->group(function () {
 
     // ソーシャルログイン
     Route::prefix('socialite')
-        ->controller(SocialiteLoginController::class)
+        ->name('socialite.')
         ->group(function () {
-            Route::get('/{driver}', 'redirectToProvider')
-                ->name('socialite.redirect')
-                ->whereIn('driver', ['line']);
+            Route::controller(SocialiteController::class)
+                ->group(function () {
+                    Route::get('/{driver}', 'redirectToProvider')
+                        ->name('redirect')
+                        ->whereIn('driver', ['line']);
+                    Route::get('/{social:driver}/callback', 'handleProviderCallback')
+                        ->name('callback');
+                });
 
-            Route::get('/{social:driver}/callback', 'handleProviderCallback')
-                ->name('socialite.callback');
-
-            Route::get('/{social:driver}/confirmation', 'confirmation')
-                ->name('socialite.confirmation');
-
-            Route::post('/{social:driver}/register');
+            Route::controller(LoginController::class)
+                ->group(function () {
+                    Route::get('/{social:driver}/authenticate', 'authenticate')
+                        ->name('authenticate');
+                });
         });
 });
 
 Route::middleware('auth')->group(function () {
+    Route::view('home', 'dashboard')->name('home');
+
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 
