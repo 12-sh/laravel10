@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Providers\Socialite\LineExtendSocialite as SocialiteLineExtendSocialite;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -21,7 +22,8 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         SocialiteWasCalled::class => [
-            LineExtendSocialite::class.'@handle',
+            // LineExtendSocialite::class.'@handle',
+            SocialiteLineExtendSocialite::class.'@handle',
         ],
     ];
 
